@@ -69,6 +69,13 @@ Contributions are welcome! If you have ideas for new checks, improvements, or bu
 
 - Share the tool with fellow hackers
 
+## Requirements.txt (optional)
+```
+curl
+net-tools
+libcap2-bin
+exploitdb
+```
 
 ## 📄 License
 This project is licensed under the MIT License.
