@@ -1,4 +1,8 @@
-# pwnbraker
+
+<img width="839" alt="Screenshot 2025-04-01 at 1 29 16 PM" src="https://github.com/user-attachments/assets/4dd33276-00b5-4b15-8c3e-4678826d5f54" />
+
+
+
 A powerful Linux privilege escalation reconnaissance tool built for red teamers, penetration testers, and security researchers. It analyzes a Linux system to identify weaknesses, misconfigurations, and known escalation vectors. All in one automated script.
 
 >  Break barriers. Pwn systems. Become root.
