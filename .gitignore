@@ -1,0 +1,8 @@
+# Ignore report and system-specific files
+*.log
+*.txt
+__pycache__/
+*.pyc
+.idea/
+.DS_Store
+.env
