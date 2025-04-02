@@ -63,6 +63,12 @@ The script will:
 
 <img width="602" alt="Screenshot 2025-04-01 at 12 05 22 PM" src="https://github.com/user-attachments/assets/1a4de8d2-2ab5-402f-86b3-0c2b038970a1" />
 
+
+
+
+https://github.com/user-attachments/assets/f46f6f8f-481e-4219-931e-41a45db7735e
+
+
 ## Contributting
 
 Contributions are welcome! If you have ideas for new checks, improvements, or bug fixes, feel free to:
