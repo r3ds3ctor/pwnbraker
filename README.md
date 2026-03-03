@@ -6,61 +6,61 @@
 
 A powerful Linux privilege escalation reconnaissance tool built for red teamers, penetration testers, and security researchers. It analyzes a Linux system to identify weaknesses, misconfigurations, and known escalation vectors. All in one automated script.
 
-> "A veces la victoria está en la simplicidad."
+> "Sometimes victory lies in simplicity."
 
-PwnBraker (`pwnb.sh`) es un script de Bash enfocado en la **enumeración rápida, visual y pragmática** para escalamiento de privilegios en sistemas Linux y Unix. A diferencia de las herramientas gigantes o auto-exploiters sobre-complicados, PwnBraker sigue una filosofía clara: **Mostrarte todo lo que necesitas ver, y luego intentar el vector más directo.**
+PwnBraker (`pwnb.sh`) is a Bash script focused on **fast, visual, and pragmatic enumeration** for privilege escalation on Linux and Unix systems. Unlike oversized tools or over-complicated auto-exploiters, PwnBraker follows a clear philosophy: **Show you everything you need to see, and then attempt the most direct vector.**
 
-## 🎯 Filosofía de Diseño
-En el pentesting real y las operaciones Red Team, los scripts automatizados que buscan condiciones "perfectas" a menudo fallan silenciosamente. `pwnb.sh` está diseñado bajo el principio de que **la mejor herramienta es la que no falla y no asume**. Presenta la información en pantalla, la guarda en un reporte, y en lugar de ejecutar una docena de exploits inestables, intenta inteligentemente la vía de escalamiento más común (`sudo bash`). Si falla, te deja con un reporte completo para explotación manual.
-
----
-
-## 🚀 Módulos de Enumeración (14 Vectores)
-
-PwnBraker inspecciona el sistema secuencialmente en busca de configuraciones erróneas y vectores locales:
-
-1. **Kernel Version**: Muestra la versión (`uname -a`) para cruzar con exploits públicos.
-2. **SUID & SGID Binaries**: Lista binarios con el bit SetUID/SetGID activado.
-3. **Sudo Privileges**: Obtiene permisos habilitados mediante `sudo -l`.
-4. **Writable Directories**: Busca carpetas donde el usuario tenga permisos de escritura a nivel raíz (`/`).
-5. **User & Group Info**: Extrae tu contexto actual de UID/GID (`id`, `groups`).
-6. **World-Writable Root Files**: Encuentra archivos críticos que root posee pero otros pueden editar.
-7. **GTFOBins Live Check**: (Online) Cruza dinámicamente binarios SUID con la base de datos de GTFOBins en internet para detectar vectores conocidos de sudo.
-8. **Capabilities**: Lista capabilities críticas asignadas a binarios (`getcap`).
-9. **Writable PATHs**: Verifica si algún directorio en tu `$PATH` es modificable (Path Hijacking).
-10. **Open Ports**: Revisa puertos locales expuestos mediante `netstat`.
-11. **Container Detection**: Identifica si estás operando dentro de Docker o LXC.
-12. **SSH Keys**: Busca llaves privadas (`id_rsa`, `id_dsa`) expuestas en el sistema.
-13. **Shadow File Check**: Alerta roja si `/etc/shadow` es legible por tu usuario.
-14. **Local Exploit Search**: (Si `searchsploit` está instalado), busca exploits aplicables al kernel actual.
+## 🎯 Design Philosophy
+In real-world pentesting and Red Team operations, automated scripts that search for "perfect" conditions often fail silently. `pwnb.sh` is designed under the principle that **the best tool is the one that doesn't fail and doesn't make assumptions**. It presents information on the screen, saves it to a report, and instead of executing a dozen unstable exploits, it intelligently attempts the most common escalation path (`sudo bash`). If it fails, it leaves you with a comprehensive report for manual exploitation.
 
 ---
 
-## ⚡ La Explotación (El "Hail Mary")
+## 🚀 Enumeration Modules (14 Vectors)
 
-Tras finalizar el escaneo visual y guardar un reporte limpio en `privilege_escalation_report.txt`, el script se detiene y pregunta:
+PwnBraker sequentially inspects the system for misconfigurations and local vectors:
+
+1. **Kernel Version**: Displays the version (`uname -a`) to cross-reference with public exploits.
+2. **SUID & SGID Binaries**: Lists binaries with the SetUID/SetGID bit enabled.
+3. **Sudo Privileges**: Retrieves enabled permissions using `sudo -l`.
+4. **Writable Directories**: Searches for folders where the user has write permissions at the root level (`/`).
+5. **User & Group Info**: Extracts your current UID/GID context (`id`, `groups`).
+6. **World-Writable Root Files**: Finds critical files owned by root but editable by others.
+7. **GTFOBins Live Check**: (Online) Dynamically cross-references SUID binaries with the online GTFOBins database to detect known sudo vectors.
+8. **Capabilities**: Lists critical capabilities assigned to binaries (`getcap`).
+9. **Writable PATHs**: Checks if any directory in your `$PATH` is writable (Path Hijacking).
+10. **Open Ports**: Reviews exposed local ports using `netstat`.
+11. **Container Detection**: Identifies if you are operating inside Docker or LXC.
+12. **SSH Keys**: Searches for private keys (`id_rsa`, `id_dsa`) exposed on the system.
+13. **Shadow File Check**: Red alert if `/etc/shadow` is readable by your user.
+14. **Local Exploit Search**: (If `searchsploit` is installed), searches for exploits applicable to the current kernel.
+
+---
+
+## ⚡ Exploitation (The "Hail Mary")
+
+After finishing the visual scan and saving a clean report to `privilege_escalation_report.txt`, the script pauses and asks:
 
 `Do you want to attempt privilege escalation? (y/n)`
 
-Si respondes `y`, PwnBraker intentará un vector puro y directo: ejecutar `/bin/bash` bajo `sudo` sin contraseña (`sudo -n id`). Si el administrador dejó configuraciones abiertas globales (como `NOPASSWD: ALL` o permisos holgados), este intento simple **te devolverá una shell interactiva como root instantáneamente**.
+If you answer `y`, PwnBraker will attempt a pure and direct vector: executing `/bin/bash` under `sudo` without a password (`sudo -n id`). If the administrator left global configurations open (like `NOPASSWD: ALL` or loose permissions), this simple attempt **will instantly drop you into an interactive root shell**.
 
 ---
 
 ## 💻 Quick Start
 
 ```bash
-# Descargar el script
+# Download the script
 curl -O https://raw.githubusercontent.com/r3ds3ctor/pwnbraker/main/pwnb.sh
 
-# Dar permisos de ejecución
+# Grant execution permissions
 chmod +x pwnb.sh
 
-# Ejecutar la enumeración
+# Run the enumeration
 ./pwnb.sh
 ```
 
-### Resultados
-Toda la salida de la enumeración se copia en tiempo real al archivo `privilege_escalation_report.txt` en el mismo directorio. Puedes usarlo posteriormente para documentar tu auditoría.
+### Results
+All enumeration output is copied in real-time to the `privilege_escalation_report.txt` file in the same directory. You can use it later to document your audit.
 
 ---
 
@@ -71,7 +71,7 @@ Toda la salida de la enumeración se copia en tiempo real al archivo `privilege_
 https://github.com/user-attachments/assets/f46f6f8f-481e-4219-931e-41a45db7735e
 
 
-## Contributting
+## Contributing
 
 Contributions are welcome! If you have ideas for new checks, improvements, or bug fixes, feel free to:
 
@@ -88,8 +88,8 @@ Founder of Cyber Sector | Red Teamer | Fullstack Builder | Security Disruptor
 
 ☕ Support the project: buymeacoffee.com/alexboteroh
 
-## ⚠️ Aviso Legal
-Esta herramienta está diseñada **únicamente** para fines educativos, auditorías de seguridad autorizadas, y ejercicios CND/CNE legales. El autor no se hace responsable del uso indebido ni del daño que pueda causar en sistemas de terceros sin autorización explícita.
+## ⚠️ Disclaimer
+This tool is designed **strictly** for educational purposes, authorized security auditing, and legal CND/CNE exercises. The author assumes no responsibility for misuse or damage caused to third-party systems without explicit authorization.
 
 ## 🔓 PwnBraker
 **PwnBraker** — Escalate intelligently. Break systems ethically. Become the root of power.
